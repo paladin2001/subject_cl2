@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subject
+  labels:
+    app: subject
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subject
+  template:
+    metadata:
+      labels:
+        app: subject
+    spec:
+      containers:
+        - name: subject
+          image: skccuser06.azurecr.io/subject:v1
+          ports:
+          - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8100
+            initialDelaySeconds: 5
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
