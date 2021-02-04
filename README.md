@@ -1,5 +1,4 @@
-# subject_cl2
-# Subject
+# 수강신청 MSA
 
 # 서비스 시나리오
 ## 기능적 요구사항
@@ -7,8 +6,8 @@
 2. 학생은 수강신청을 취소할 수 있다 (cancel Register)
 3. 교수는 수강신청되면 학점을 부여할 수 있다 (receive Grade)
 4. 학생은 장학금 혹은 위로금을 받을 수 있다 (give Scholarship)
-5. 학생은 수강상태 및 장학금/위로금 수신현황을 확인할 수 있어야 한다 (Mypage) 
-    
+5. 학생은 수강상태 및 장학금/위로금 수신현황을 확인할 수 있어야 한다 (Mypage)
+
 
 ## 비기능적 요구사항
 1. 트랜잭션
@@ -41,7 +40,7 @@ https://workflowy.com/s/assessment/qJn45fBdVZn4atl3
 5. 학생은 수강상태 및 장학금/위로금 수신현황을 확인할 수 있어야 한다 (Mypage) -> OK 
 ```
 ## 헥사고날 아키텍쳐 다이어그램 도출 (Polyglot)
-!![헥사고날2](https://user-images.githubusercontent.com/25020453/106844529-242a5080-66ec-11eb-9d30-735e4eee6092.png)
+![헥사고날2](https://user-images.githubusercontent.com/25020453/106844529-242a5080-66ec-11eb-9d30-735e4eee6092.png)
 
 # 구현
 분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 각 BC별로 대변되는 마이크로 서비스들을 스프링부트로 구현하였다. 구현한 각 서비스를 로컬에서 실행하는 방법은 아래와 같다 (각자의 포트넘버는 8081 ~ 8084, 8088 이다)
@@ -150,8 +149,8 @@ public class Subject {
   ![image](https://user-images.githubusercontent.com/25020453/106845642-b895b280-66ee-11eb-9584-312580e8eea2.PNG)
 
     - 수강신청내역 조회
-  ![1_MYPAGE](https://user-images.githubusercontent.com/25020453/106845648-ba5f7600-66ee-11eb-8be4-ce88e3293a02.PNG)
-  ![1_MYPAGE2](https://user-images.githubusercontent.com/25020453/106845651-bc293980-66ee-11eb-979a-60a8743fa27d.PNG)
+      ![1_MYPAGE](https://user-images.githubusercontent.com/25020453/106845648-ba5f7600-66ee-11eb-8be4-ce88e3293a02.PNG)
+      ![1_MYPAGE2](https://user-images.githubusercontent.com/25020453/106845651-bc293980-66ee-11eb-979a-60a8743fa27d.PNG)
 
 
 ## Gateway 적용
@@ -295,18 +294,18 @@ public void onPostPersist(){
 ```        
 - 동기식 호출에서는 호출 시간에 따른 타임 커플링이 발생하여, 주문 취소 시스템에 장애가 나면 배송도 취소되지 않는다는 것을 확인
     - grade에서 직접 입력시 scholarship에도 신호 전달
-      - grade에서 호출
-    - Recipe 서비스와 Order 서비스가 둘 다 동시에 돌아가고 있을때 Recipe 서비스 실행시 이상 없음  
-      - grade 호출
-        ![image](https://user-images.githubusercontent.com/12531980/106556204-5f007d00-6562-11eb-8087-e0260a54d7bd.png)
-      - scholarship에서 수신
-        ![image](https://user-images.githubusercontent.com/25020453/106847639-a3228780-66f2-11eb-9e65-18b45e0d5a30.PNG)
-        ![image](https://user-images.githubusercontent.com/25020453/106847644-a584e180-66f2-11eb-826e-c530bd7f780b.PNG)
+        - grade에서 호출
+    - Recipe 서비스와 Order 서비스가 둘 다 동시에 돌아가고 있을때 Recipe 서비스 실행시 이상 없음
+        - grade 호출
+          ![image](https://user-images.githubusercontent.com/12531980/106556204-5f007d00-6562-11eb-8087-e0260a54d7bd.png)
+        - scholarship에서 수신
+          ![image](https://user-images.githubusercontent.com/25020453/106847639-a3228780-66f2-11eb-9e65-18b45e0d5a30.PNG)
+          ![image](https://user-images.githubusercontent.com/25020453/106847644-a584e180-66f2-11eb-826e-c530bd7f780b.PNG)
     - scholarship 서비스 중지시 grade 호출
-      - scholarship 서비스 중지 (Ctrl-C)  
-        ![image](https://user-images.githubusercontent.com/25020453/106847654-a7e73b80-66f2-11eb-9f8c-0050a61551e8.PNG)
-      - 에러발생  
-        ![image](https://user-images.githubusercontent.com/25020453/106847656-a9b0ff00-66f2-11eb-9a59-b230c0dfca68.PNG)
+        - scholarship 서비스 중지 (Ctrl-C)  
+          ![image](https://user-images.githubusercontent.com/25020453/106847654-a7e73b80-66f2-11eb-9f8c-0050a61551e8.PNG)
+        - 에러발생  
+          ![image](https://user-images.githubusercontent.com/25020453/106847656-a9b0ff00-66f2-11eb-9a59-b230c0dfca68.PNG)
 
 ## 비동기식 호출 (Pub/Sub 방식)
 - Recipe.java 내에서 아래와 같이 서비스 Pub 구현
@@ -360,23 +359,23 @@ public class PolicyHandler{
 }
 ```
 - 비동기식 호출은 다른 서비스가 비정상이여도 이상없이 동작가능하여, grade 서비스에 장애발생시에도 수강신청 서비스는 정상 동작을 확인
-    - Recipe 서비스와 Order 서비스가 둘 다 동시에 돌아가고 있을때 Recipe 서비스 실행시 이상 없음  
+    - Recipe 서비스와 Order 서비스가 둘 다 동시에 돌아가고 있을때 Recipe 서비스 실행시 이상 없음
         - subject 서비스 실행시 grade 정상 전달
-      ![image](https://user-images.githubusercontent.com/25020453/106848737-e1b94180-66f4-11eb-9e30-c0b0f88bc0a2.PNG)
-      ![image](https://user-images.githubusercontent.com/25020453/106848741-e3830500-66f4-11eb-8446-bd551baf6389.PNG)
-      ![image](https://user-images.githubusercontent.com/25020453/106848748-e5e55f00-66f4-11eb-9d61-4131b2bab373.PNG)
+          ![image](https://user-images.githubusercontent.com/25020453/106848737-e1b94180-66f4-11eb-9e30-c0b0f88bc0a2.PNG)
+          ![image](https://user-images.githubusercontent.com/25020453/106848741-e3830500-66f4-11eb-8446-bd551baf6389.PNG)
+          ![image](https://user-images.githubusercontent.com/25020453/106848748-e5e55f00-66f4-11eb-9d61-4131b2bab373.PNG)
         - grade 서비스를 내림      
-      ![image](https://user-images.githubusercontent.com/25020453/106848766-ec73d680-66f4-11eb-8590-03baa5c6611a.PNG)
+          ![image](https://user-images.githubusercontent.com/25020453/106848766-ec73d680-66f4-11eb-8590-03baa5c6611a.PNG)
         - subject 호출시에도 장애없이 진행
-      ![image](https://user-images.githubusercontent.com/25020453/106848773-ef6ec700-66f4-11eb-99d5-bf21d72366c8.PNG)      
-      
+          ![image](https://user-images.githubusercontent.com/25020453/106848773-ef6ec700-66f4-11eb-99d5-bf21d72366c8.PNG)
+
 
 ## CQRS
 viewer를 별도로 구현하여 아래와 같이 view 가 출력된다.
-- MaterialOrdered 수행 후의 mypage  
-  ![image](https://user-images.githubusercontent.com/12531980/106606835-ecb18c00-65a5-11eb-85fa-9342cc8bef3d.png)
-- OrderCanceled 수행 후의 mypage
-  ![image](https://user-images.githubusercontent.com/12531980/106606970-17034980-65a6-11eb-91e3-55c4e31a7e36.png)
+- register Subject 수행 후의 mypage  
+  ![image](https://user-images.githubusercontent.com/25020453/106905358-8f514280-673f-11eb-88d0-c183801bc03f.png)
+- give Scholarship 수행 후의 mypage
+  ![image](https://user-images.githubusercontent.com/25020453/106906448-87de6900-6740-11eb-9636-80adbd0de5d3.png)
 
 
 # 운영
@@ -415,11 +414,11 @@ cd subject
 az acr build --registry skccuser06 --image skccuser06.azurecr.io/subject:v1 .
 
 cd ..
-cd order
+cd grade
 az acr build --registry skccuser06 --image skccuser06.azurecr.io/grade:v1 .
 
 cd ..
-cd delivery
+cd scholarship
 az acr build --registry skccuser06 --image skccuser06.azurecr.io/scholarship:v1 .
 
 cd ..
@@ -432,45 +431,49 @@ az acr build --registry skccuser06 --image skccuser06.azurecr.io/mypage:v1 .
 ```
 - ACR에서 이미지 가져와서 Kubernetes에서 Deploy하기
 ```
-kubectl create deploy recipe --image=skccteam02.azurecr.io/recipe:v1
-kubectl create deploy order --image=skccteam02.azurecr.io/order:v1
-kubectl create deploy delivery --image=skccteam02.azurecr.io/delivery:v1
-kubectl create deploy gateway --image=skccteam02.azurecr.io/gateway:v1
-kubectl create deploy mypage --image=skccteam02.azurecr.io/mypage:v1
+kubectl create deploy subject --image=skccuser06.azurecr.io/subject:v1
+kubectl create deploy grade --image=skccuser06.azurecr.io/grade:v1
+kubectl create deploy scholarship --image=skccuser06.azurecr.io/scholarship:v1
+kubectl create deploy gateway --image=skccuser06.azurecr.io/gateway:v1
+kubectl create deploy mypage --image=skccuser06.azurecr.io/mypage:v1
 kubectl get all
 ```
-- Kubectl Deploy 결과 확인  
-  ![image](https://user-images.githubusercontent.com/16534043/106553685-34f88c00-655d-11eb-87cb-e59a6f920a5b.png)
+- Kubectl Deploy 결과 확인
+  ![image](https://user-images.githubusercontent.com/25020453/106864996-eb02d800-670d-11eb-8122-9ee803a8793d.png)
+
 - Kubernetes에서 서비스 생성하기 (Docker 생성이기에 Port는 8080이며, Gateway는 LoadBalancer로 생성)
 ```
-kubectl expose deploy recipe --type="ClusterIP" --port=8080
-kubectl expose deploy order --type="ClusterIP" --port=8080
-kubectl expose deploy delivery --type="ClusterIP" --port=8080
+kubectl expose deploy subject --type="ClusterIP" --port=8080
+kubectl expose deploy grade --type="ClusterIP" --port=8080
+kubectl expose deploy scholarship --type="ClusterIP" --port=8080
 kubectl expose deploy gateway --type="LoadBalancer" --port=8080
 kubectl expose deploy mypage --type="ClusterIP" --port=8080
 kubectl get all
-```
+``` 
 - Kubectl Expose 결과 확인  
-  ![image](https://user-images.githubusercontent.com/16534043/106554016-e0a1dc00-655d-11eb-8439-f4326cecda5a.png)
-- 테스트를 위해서 Kafka zookeeper와 server도 별도로 실행 필요
-- deployment.yaml 편집 후 배포 방안 적어두기
+  ![image](https://user-images.githubusercontent.com/25020453/106864996-eb02d800-670d-11eb-8122-9ee803a8793d.png)
+
 ## 무정지 재배포
 - 먼저 무정지 재배포가 100% 되는 것인지 확인하기 위해서 Autoscaler 이나 CB 설정을 제거함
 - siege 로 배포작업 직전에 워크로드를 모니터링 함
 ```
-siege -c100 -t60S -r10 -v http get http://delivery:8080/deliveries
+siege -c100 -t60S -r10 -v http get http://localhost:8080/subjects
 ```
-- Readiness가 설정되지 않은 yml 파일로 배포 진행  
-  ![image](https://user-images.githubusercontent.com/16534043/106564492-a261e800-6570-11eb-9b2b-31fca5350825.png)
-```
+- Readiness 설정, 미설정 yml 파일 준비
+  ![image](https://user-images.githubusercontent.com/25020453/106894919-ed2b5d80-6732-11eb-995e-5f810707cec4.png)
+  ![image](https://user-images.githubusercontent.com/25020453/106895128-3085cc00-6733-11eb-8423-04327b74a87a.png)
+
 kubectl apply -f deployment_without_readiness.yml
+
+  ![image](https://user-images.githubusercontent.com/25020453/106894569-7e4e0480-6732-11eb-8459-0e203afa0b65.png)
+  ![image](https://user-images.githubusercontent.com/25020453/106894712-ab9ab280-6732-11eb-89b6-936235ff360d.png)
 ```
 - 아래 그림과 같이, Kubernetes가 준비가 되지 않은 delivery pod에 요청을 보내서 siege의 Availability 가 100% 미만으로 떨어짐
 - 중간에 socket에 끊겨서 siege 명령어 종료됨 (서비스 정지 발생)  
   ![image](https://user-images.githubusercontent.com/16534043/106564722-fb318080-6570-11eb-92d5-181e50772e8b.png)
 - 무정지 재배포 여부 확인 전에, siege 로 배포작업 직전에 워크로드를 모니터링
 ```
-siege -c100 -t60S -r10 -v http get http://delivery:8080/deliveries
+siege -c5 -t60S -v --content-type "application/json" 'http://subject:8080 {"subjectNm": "math"}'
 ```
 - Readiness가 설정된 yml 파일로 배포 진행  
   ![image](https://user-images.githubusercontent.com/16534043/106564838-22884d80-6571-11eb-8cf1-dd0e53b547d7.png)
@@ -481,7 +484,7 @@ kubectl apply -f deployment_with_readiness.yml```
   ![image](https://user-images.githubusercontent.com/16534043/106564937-52375580-6571-11eb-994f-b69acceb64b0.png)  
   ![image](https://user-images.githubusercontent.com/16534043/106565031-75620500-6571-11eb-9028-bd05d8125f04.png)
 - siege 가 중단되지 않고, Availability가 높아졌음을 확인하여 무정지 재배포가 됨을 확인함  
-  ![image](https://user-images.githubusercontent.com/16534043/106565135-a80bfd80-6571-11eb-943e-b3bd77c519db.png)
+  ![image](https://user-images.githubusercontent.com/25020453/106892939-27473000-6730-11eb-9b5a-c343dbfc6679.png)
 
 ## 오토스케일 아웃
 - 서킷 브레이커는 시스템을 안정되게 운영할 수 있게 해줬지만, 사용자의 요청이 급증하는 경우, 오토스케일 아웃이 필요하다.
@@ -491,23 +494,23 @@ kubectl apply -f - <<EOF
   apiVersion: apps/v1
   kind: Deployment
   metadata:
-    name: recipe
+    name: subject
     namespace: default
     labels:
-      app: recipe
+      app: subject
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: recipe
+        app: subject
     template:
       metadata:
         labels:
-          app: recipe
+          app: subject
       spec:
         containers:
-          - name: recipe
-            image: skccteam02.azurecr.io/recipe:v1
+          - name: subject
+            image: skccuser06.azurecr.io/subject:v1
             ports:
               - containerPort: 8080
             resources:
@@ -524,14 +527,12 @@ kubectl expose deploy recipe --type="ClusterIP" --port=8080
 ```
 - recipe 시스템에 replica를 자동으로 늘려줄 수 있도록 HPA를 설정한다. 설정은 CPU 사용량이 15%를 넘어서면 replica를 10개까지 늘려준다.
 ```
-kubectl autoscale deploy recipe --min=1 --max=10 --cpu-percent=15
-```
+kubectl autoscale deploy subject --min=1 --max=10 --cpu-percent=15
+
 - hpa 설정 확인  
-  ![image](https://user-images.githubusercontent.com/16534043/106558142-9709bf00-6566-11eb-9340-12959204fee8.png)
+  ![image](https://user-images.githubusercontent.com/25020453/106895766-fc5edb00-6733-11eb-9ba4-51a8f8e6eadf.png)
 - hpa 상세 설정 확인  
-  ![image](https://user-images.githubusercontent.com/16534043/106558218-b3a5f700-6566-11eb-9b74-0c93679d2b31.png)
-  ![image](https://user-images.githubusercontent.com/16534043/106558245-c0c2e600-6566-11eb-89fe-8a6178e1f976.png)
-- - siege를 활용해서 워크로드를 2분간 걸어준다. (Cloud 내 siege pod에서 부하줄 것)
+- siege를 활용해서 워크로드를 2분간 걸어준다. (Cloud 내 siege pod에서 부하줄 것)
 ```
 kubectl exec -it (siege POD 이름) -- /bin/bash
 siege -c1000 -t120S -r100 -v --content-type "application/json" 'http://recipe:8080/recipes POST {"recipeNm": "apple_Juice"}'
@@ -540,19 +541,13 @@ siege -c1000 -t120S -r100 -v --content-type "application/json" 'http://recipe:80
 ```
 watch kubectl get all
 ```
+![image](https://user-images.githubusercontent.com/25020453/106895980-4647c100-6734-11eb-9952-707cd2cc457a.png)
 - siege 실행 결과 표시  
   ![image](https://user-images.githubusercontent.com/16534043/106560612-a12dbc80-656a-11eb-8213-5a07a0a03561.png)
 - 오토스케일이 되지 않아, siege 성공률이 낮다.
 
 - 스케일 아웃이 자동으로 되었음을 확인
-  ![image](https://user-images.githubusercontent.com/16534043/106560501-75aad200-656a-11eb-99dc-fe585ef7e741.png)
-- siege 재실행
-```
-kubectl exec -it (siege POD 이름) -- /bin/bash
-siege -c1000 -t120S -r100 -v --content-type "application/json" 'http://recipe:8080/recipes POST {"recipeNm": "apple_Juice"}'
-```
-- siege 의 로그를 보아도 전체적인 성공률이 높아진 것을 확인 할 수 있다.  
-  ![image](https://user-images.githubusercontent.com/16534043/106560930-3335c500-656b-11eb-8165-bcb066a03f15.png)
+  ![image](https://user-images.githubusercontent.com/25020453/106897594-7beda980-6736-11eb-9a73-ec2828989453.png)
 
 ## Self-healing (Liveness Probe)
 - delivery 시스템 yml 파일의 liveness probe 설정을 바꾸어서, liveness probe가 동작함을 확인
@@ -561,34 +556,56 @@ siege -c1000 -t120S -r100 -v --content-type "application/json" 'http://recipe:80
         livenessProbe:
             httpGet:
               path: '/actuator/health'
-              port: 8090
+              port: 8100
             initialDelaySeconds: 120
             timeoutSeconds: 2
             periodSeconds: 5
             failureThreshold: 5
 ```
-
-- delivery에 liveness가 적용된 것을 확인  
-  ![image](https://user-images.githubusercontent.com/16534043/106566682-f7ebc400-6573-11eb-8452-ed693bdf1f17.png)
-- delivery에 liveness가 발동되었고, 8090 포트에 응답이 없기에 Restart가 발생함   
-  ![image](https://user-images.githubusercontent.com/16534043/106566789-210c5480-6574-11eb-8e71-ae11755e274f.png)
+- 시작전 상황
+  ![image](https://user-images.githubusercontent.com/25020453/106898705-dd624800-6737-11eb-93c9-caacb995d79b.png)
+- 적용 후 subject에 liveness가 발동되었고, 8100 포트에 응답이 없기에 Restart가 발생함   
+  ![image](https://user-images.githubusercontent.com/25020453/106898886-15698b00-6738-11eb-9ddb-36de4428376c.png)
 
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
-- istio 사용 (Destination Rule)
+- Istio 사용 (Destination Rule)
+```
+  kubectl label namespace istio-test-ns istio-injection=enabled
+```  
+![image](https://user-images.githubusercontent.com/25020453/106902563-55327180-673c-11eb-9f98-0ef9719d7e19.png)```
+
+- 해당 namespace에 기존 서비스 재배포
+```
+# kubectl로 deploy 실행 (실행 위치는 상관없음)
+# 이미지 이름과 버전명에 유의
+kubectl create deploy subject --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
+kubectl create deploy grade --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
+kubectl create deploy scholarship --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
+kubectl create deploy gateway --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
+kubectl create deploy mypage --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
+kubectl get all
+
+#expose 하기
+# (주의) expose할 때, gateway만 LoadBalancer고, 나머지는 ClusterIP임
+kubectl expose deploy subject --type="ClusterIP" --port=8080 -n istio-test-ns
+kubectl expose deploy grade --type="ClusterIP" --port=8080 -n istio-test-ns
+kubectl expose deploy scholarship --type="ClusterIP" --port=8080 -n istio-test-ns
+kubectl expose deploy gateway --type="LoadBalancer" --port=8080 -n istio-test-ns
+kubectl expose deploy mypage --type="ClusterIP" --port=8080 -n istio-test-ns
 - Retry 적용
 - Pool Ejection
 ## 모니터링, 앨럿팅
 - Kiali 활용
 - Jager 활용
-## Canary Deploy
-- istio로 실행
-## 운영 유연성 - Persistence Volume, Persistence Volume Claim 적용
-- yaml 파일로 만들어서 붙이기
+
+
+
+
 ## ConfigMap 적용
 - ConfigMap을 활용하여 변수를 서비스에 이식한다.
 - ConfigMap 생성하기
 ```
-kubectl create configmap deliveryword --from-literal=word=Preparing
+kubectl create configmap subjectword --from-literal=word=SystemReady
 ```  
 - Configmap 생성 확인  
   ![image](https://user-images.githubusercontent.com/16534043/106593940-c505f800-6594-11eb-9284-8e896b531f04.png)
