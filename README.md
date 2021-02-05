@@ -562,53 +562,46 @@ watch kubectl get all
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
 - Istio 사용 (Destination Rule)
 ```
-  kubectl label namespace istio-test-ns istio-injection=enabled
+kubectl create namespace istio-test-ns
+kubectl label namespace istio-test-ns istio-injection=enabled
 ```  
-![image](https://user-images.githubusercontent.com/25020453/106902563-55327180-673c-11eb-9f98-0ef9719d7e19.png)```
+![image](https://user-images.githubusercontent.com/25020453/106902563-55327180-673c-11eb-9f98-0ef9719d7e19.png)
 
 - 해당 namespace에 기존 서비스 재배포
 ```
 # kubectl로 deploy 실행 (실행 위치는 상관없음)
-# 이미지 이름과 버전명에 유의
 kubectl create deploy subject --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
 kubectl create deploy grade --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
 kubectl create deploy scholarship --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
 kubectl create deploy gateway --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
 kubectl create deploy mypage --image=skccuser06.azurecr.io/recipe:v1 -n istio-test-ns
-kubectl get all
-
-#expose 하기
+```
+- expose
+```
 # (주의) expose할 때, gateway만 LoadBalancer고, 나머지는 ClusterIP임
 kubectl expose deploy subject --type="ClusterIP" --port=8080 -n istio-test-ns
 kubectl expose deploy grade --type="ClusterIP" --port=8080 -n istio-test-ns
 kubectl expose deploy scholarship --type="ClusterIP" --port=8080 -n istio-test-ns
 kubectl expose deploy gateway --type="LoadBalancer" --port=8080 -n istio-test-ns
 kubectl expose deploy mypage --type="ClusterIP" --port=8080 -n istio-test-ns
+```
 - Retry 적용
 - Pool Ejection
-## 모니터링, 앨럿팅
-- Kiali 활용
-- Jager 활용
-
-
-
 
 ## ConfigMap 적용
-- ConfigMap을 활용하여 변수를 서비스에 이식한다.
+- ConfigMap을 활용하여 변수를 서비스에 이식
 - ConfigMap 생성하기
 ```
 kubectl create configmap subjectword --from-literal=word=SystemReady
 ```  
 - Configmap 생성 확인  
-  ![image](https://user-images.githubusercontent.com/16534043/106593940-c505f800-6594-11eb-9284-8e896b531f04.png)
-
+  ![801_configmap](https://user-images.githubusercontent.com/25020453/106973486-47113f00-6796-11eb-8d15-ca051a572e1a.png)
 - 소스 수정에 따른 Docker 이미지 변경이 필요하기에, 기존 Delivery 서비스 삭제
 ```
 kubectl delete pod,deploy,service delivery
 ```
 - Delivery 서비스의 PolicyHandler.java (delivery\src\main\java\searchrecipe) 수정
 ```
-#30번째 줄을 아래와 같이 수정
 #기존 항목 주석처리 후, Configmap으로 이식된 환경변수 호출
 // delivery.setStatus("\"+process.env.delivery_status+ \"");
 delivery.setStatus(" Delivery Status is " + System.getenv("STATUS"));
@@ -639,5 +632,8 @@ http post http://20.194.26.128:8080/recipes recipeNm=apple_Juice cookingMethod=U
 ![image](https://user-images.githubusercontent.com/16534043/106603485-ae19d280-65a1-11eb-9fe5-773e1ad46790.png)
 
 
-## Secret 적용
-- secret 적용
+
+
+
+
+
